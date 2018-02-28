@@ -59,3 +59,5 @@ fabric.properties
 node_modules
 dist/
 google-services.json
+local.properties
+.DS_STORE

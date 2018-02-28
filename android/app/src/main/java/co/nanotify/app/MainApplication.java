@@ -1,7 +1,8 @@
-package com.echosoft.nanotify;
+package co.nanotify.app;
 
 import android.app.Application;
 
+import co.nanotify.app.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

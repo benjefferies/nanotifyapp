@@ -1,4 +1,4 @@
-package com.echosoft.nanotify;
+package co.nanotify.app;
 
 import android.util.Log;
 
