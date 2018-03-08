@@ -9,4 +9,5 @@ const App = StackNavigator({
     QrCode: {screen: QrCodeScreen}
 });
 
+import QrCode from './QrCode';
 AppRegistry.registerComponent('nanotify', () => App);
