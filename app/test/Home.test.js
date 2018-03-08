@@ -1,5 +1,5 @@
 import React from 'react';
-import HomeScreen from './Home';
+import HomeScreen from '../src/Home';
 
 import renderer from 'react-test-renderer';
 

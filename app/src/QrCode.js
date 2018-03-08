@@ -10,7 +10,7 @@ export default class QrCodeScreen extends React.Component {
         return (
             <View style={styles.containerFullWith}>
                 <View style={styles.containerCentered}>
-                    <Image source={require('./assets/RNFirebase512x512.png')} style={[styles.logo]} />
+                    <Image source={require('../../assets/RNFirebase512x512.png')} style={[styles.logo]} />
                 </View>
                 <View style={styles.containerFullWith}>
                 </View>
