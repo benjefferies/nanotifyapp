@@ -21,11 +21,12 @@
     "preset": "react-native"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "fbjs": "^0.8.16",
     "react": "^16.2.0",
     "react-native": "^0.52.0",
     "react-native-firebase": "^3.2.2",
-    "react-navigation": "^1.5.0",
-    "react-native-qrcode": "^0.2.6"
+    "react-native-qrcode": "^0.2.6",
+    "react-navigation": "^1.5.0"
   }
 }

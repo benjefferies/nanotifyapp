@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Image, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, Button, AsyncStorage } from 'react-native';
 import QrCode from "./QrCode";
+import axios from 'axios';
+import firebase from 'react-native-firebase';
 
 export default class HomeScreen extends React.Component {
   constructor() {
@@ -14,12 +16,59 @@ export default class HomeScreen extends React.Component {
     // firebase things?
   }
 
-  subscribe() {
-    console.log(`Subscribing to account ${this.state.account}`)
+  subscribeClicked() {
+    var account = this.state.account
+    if (!account.match('xrb_[a-zA-Z0-9]{60}')) {
+      console.log(`Invalid account format ${account}`)
+      return
+    }
+    try {
+      AsyncStorage.getItem('account', (err, oldAccount) => {
+        AsyncStorage.setItem('account', account, () => {
+          this.subscribe(account)
+        })
+        console.log(`Unsubscribing from account ${oldAccount}`)
+        firebase.messaging().unsubscribeFromTopic(oldAccount)
+      });
+      subscribe()
+    } catch (error) {
+      console.log(`failed to get or save account ${account}`)
+      console.log(error)
+      // Maybe first time subscribing
+      try {
+        AsyncStorage.setItem('account', account, () => {this.subscribe(account)})
+      } catch (error) {
+        console.log(error)
+        console.log(`failed to save account ${account}`)
+        this.setState({account: ''})
+      }
+    }
+  }
+
+  subscribe(account) {
+    axios.post('https://nanotify.co/mobile/subscribe', {
+        account: account
+      })
+      .then(function (response) {
+        if (response.status == 201) {
+          console.log(`Subscribing to account ${account}`)
+          firebase.messaging().subscribeToTopic(account)
+        } else {
+          console.log(`Could not subscribe to account ${account}`)
+        }
+      })
+      .catch(function (error) {
+        if (error.response.status == 409) {
+          console.log(`Subscribing to account ${account}`)
+          firebase.messaging().subscribeToTopic(account)
+        } else {
+          console.log(error);
+        }
+      });
   }
 
   render() {
-      const subscribe = this.subscribe;
+      const subscribe = this.subscribeClicked.bind(this);
       return (
       <View style={styles.containerFullWith}>
         <View style={styles.containerCentered}>

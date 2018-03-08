@@ -1,18 +1,44 @@
 import React from 'react';
-import {StyleSheet, Image, View, Button} from 'react-native';
+import {StyleSheet, Image, View, Button, TextInput, AsyncStorage} from 'react-native';
+import QRCode from 'react-native-qrcode';
 
 export default class QrCodeScreen extends React.Component {
     constructor() {
         super();
+        this.state = {
+          amount: '0',
+          qrString: ''
+        };
+    }
+
+    updateQrCode(amount) {
+        AsyncStorage.getItem('account', (err, account) => {
+            this.setState({qrString: `xrb:${account}?amount=${this.state.amount}`})
+        });
+        this.setState({amount: amount})
+    }
+
+    componentDidMount() {
+        AsyncStorage.getItem('account', (err, account) => {
+            this.setState({qrString: `xrb:${account}?amount=${this.state.amount}`})
+        });
     }
 
     render() {
         return (
             <View style={styles.containerFullWith}>
+                <TextInput
+                keyboardType='numeric'
+                style={styles.input}
+                onChangeText={(amount) => this.updateQrCode(amount)}
+                value={this.state.amount}
+                />
                 <View style={styles.containerCentered}>
-                    <Image source={require('../../assets/RNFirebase512x512.png')} style={[styles.logo]} />
-                </View>
-                <View style={styles.containerFullWith}>
+                    <QRCode
+                    value={this.state.qrString}
+                    size={200}
+                    bgColor='purple'
+                    fgColor='white'/>
                 </View>
                 <View>
                     <Button style={styles.button}
