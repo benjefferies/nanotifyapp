@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, Button } from 'react-native';
+import QrCode from "./QrCode";
 
-export default class App extends React.Component {
+export default class HomeScreen extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -18,8 +19,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    var subscribe = this.subscribe;
-    return (
+      const subscribe = this.subscribe;
+      return (
       <View style={styles.containerFullWith}>
         <View style={styles.containerCentered}>
           <Image source={require('./assets/RNFirebase512x512.png')} style={[styles.logo]} />
@@ -40,6 +41,12 @@ export default class App extends React.Component {
             accessibilityLabel="Subscribe to an account"
           />
           </View>
+          <Button
+              class="cardStyle"
+              onPress={() => this.props.navigation.navigate('QrCode')}
+              title="QR Code"
+
+          />
       </View>
     );
   }
