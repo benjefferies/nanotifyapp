@@ -25,6 +25,7 @@
     "fbjs": "^0.8.16",
     "react": "^16.2.0",
     "react-native": "^0.52.0",
+    "react-native-cardview": "^1.1.5",
     "react-native-firebase": "^3.2.2",
     "react-native-qrcode": "^0.2.6",
     "react-navigation": "^1.5.0"

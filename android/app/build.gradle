@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-cardview')
     compile(project(':react-native-firebase')) {
         transitive = false
     }

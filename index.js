@@ -6,8 +6,10 @@ import QrCodeScreen from "./app/src/QrCode";
 
 const App = StackNavigator({
     Home: {screen: HomeScreen},
-    QrCode: {screen: QrCodeScreen}
+    QrCode: {screen: QrCodeScreen},
+    Transactions: {screen: Transactions}
 });
 
 import QrCode from './QrCode';
+import Transactions from './app/src/Transactions';
 AppRegistry.registerComponent('nanotify', () => App);

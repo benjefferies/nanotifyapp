@@ -13,7 +13,10 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    // firebase things?
+    var setState = this.setState.bind(this)
+    AsyncStorage.getItem('account', (err, account) => {
+      setState({account: account})
+    });
   }
 
   subscribeClicked() {
@@ -90,6 +93,12 @@ export default class HomeScreen extends React.Component {
             accessibilityLabel="Subscribe to an account"
           />
           </View>
+          <Button
+              class="cardStyle"
+              onPress={() => this.props.navigation.navigate('Transactions')}
+              title="Transactions"
+
+          />
           <Button
               class="cardStyle"
               onPress={() => this.props.navigation.navigate('QrCode')}
