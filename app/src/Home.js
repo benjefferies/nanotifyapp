@@ -3,6 +3,10 @@ import { StyleSheet, Image, Text, View, TextInput, Button, AsyncStorage } from '
 import QrCode from "./QrCode";
 import axios from 'axios';
 import firebase from 'react-native-firebase';
+import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import Navigation from './Navigation'
+
 
 export default class HomeScreen extends React.Component {
   constructor() {
@@ -10,6 +14,11 @@ export default class HomeScreen extends React.Component {
     this.state = {
       account: ''
     };
+  }
+
+  static navigationOptions =  {
+      title: 'Subscribe',
+      headerLeft: null
   }
 
   componentDidMount() {
@@ -27,13 +36,12 @@ export default class HomeScreen extends React.Component {
     }
     try {
       AsyncStorage.getItem('account', (err, oldAccount) => {
+        console.log(`Unsubscribing from account ${oldAccount}`)
+        firebase.messaging().unsubscribeFromTopic(oldAccount)
         AsyncStorage.setItem('account', account, () => {
           this.subscribe(account)
         })
-        console.log(`Unsubscribing from account ${oldAccount}`)
-        firebase.messaging().unsubscribeFromTopic(oldAccount)
       });
-      subscribe()
     } catch (error) {
       console.log(`failed to get or save account ${account}`)
       console.log(error)
@@ -61,50 +69,38 @@ export default class HomeScreen extends React.Component {
         }
       })
       .catch(function (error) {
-        if (error.response.status == 409) {
+        console.log(error);
+        if (error.response && error.response.status == 409) {
           console.log(`Subscribing to account ${account}`)
           firebase.messaging().subscribeToTopic(account)
-        } else {
-          console.log(error);
         }
       });
   }
 
   render() {
-      const subscribe = this.subscribeClicked.bind(this);
       return (
       <View style={styles.containerFullWith}>
         <View style={styles.containerCentered}>
           <Image source={require('../../assets/RNFirebase512x512.png')} style={[styles.logo]} />
           <Text style={styles.welcome}>
-            Welcome to the Nanotify!
+            Welcome to Nanotify!
           </Text>
           </View>
           <View style={styles.containerFullWith}>
           <TextInput
+            placeholder='Enter Nano Address'
             class="cardStyle"
             onChangeText={(account) => this.setState({account: account})}
             value={this.state.account}
           />
-          <Button style={styles.button}
+          <Button
             class="cardStyle"
-            onPress={subscribe}
+            onPress={() => this.subscribeClicked()}
             title="Subscribe"
             accessibilityLabel="Subscribe to an account"
           />
           </View>
-          <Button
-              class="cardStyle"
-              onPress={() => this.props.navigation.navigate('Transactions')}
-              title="Transactions"
-
-          />
-          <Button
-              class="cardStyle"
-              onPress={() => this.props.navigation.navigate('QrCode')}
-              title="QR Code"
-
-          />
+          <Navigation navigation={this.props.navigation}/>
       </View>
     );
   }
@@ -127,11 +123,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     width: 80,
   },
-  button: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -141,17 +132,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
-  modules: {
-    margin: 20,
-  },
-  modulesHeader: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  module: {
-    fontSize: 14,
-    marginTop: 4,
-    textAlign: 'center',
   }
 });

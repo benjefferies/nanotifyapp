@@ -1,14 +1,22 @@
 import React from 'react';
-import {StyleSheet, Image, View, Button, TextInput, AsyncStorage} from 'react-native';
+import {StyleSheet, Image, View, Button, TextInput, AsyncStorage, ScrollView, Text} from 'react-native';
 import QRCode from 'react-native-qrcode';
+import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import Navigation from './Navigation'
 
 export default class QrCodeScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-          amount: '0',
+          amount: '',
           qrString: ''
         };
+    }
+
+    static navigationOptions =  {
+        title: 'QR Code',
+        headerLeft: null
     }
 
     updateQrCode(amount) {
@@ -27,26 +35,23 @@ export default class QrCodeScreen extends React.Component {
     render() {
         return (
             <View style={styles.containerFullWith}>
-                <TextInput
-                keyboardType='numeric'
-                style={styles.input}
-                onChangeText={(amount) => this.updateQrCode(amount)}
-                value={this.state.amount}
-                />
+                <Text style={styles.instructions}>Scan me using the Nano App</Text>
                 <View style={styles.containerCentered}>
-                    <QRCode
+                <QRCode
                     value={this.state.qrString}
                     size={200}
                     bgColor='purple'
                     fgColor='white'/>
+
                 </View>
-                <View>
-                    <Button style={styles.button}
-                            class="cardStyle"
-                            onPress={() => this.props.navigation.goBack()}
-                            title="Home"
+                <TextInput
+                    keyboardType='numeric'
+                    placeholder='Enter Nano'
+                    style={styles.input}
+                    onChangeText={(amount) => this.updateQrCode(amount)}
+                    value={this.state.amount}
                     />
-                </View>
+                <Navigation navigation={this.props.navigation}/>
             </View>
         );
     }
@@ -54,46 +59,21 @@ export default class QrCodeScreen extends React.Component {
 
 const styles = StyleSheet.create({
     containerCentered: {
-        flex: 1,
+        flex: 3,
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     containerFullWith: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
     },
-    logo: {
-        height: 80,
-        marginBottom: 16,
-        width: 80,
-    },
-    button: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
     instructions: {
         textAlign: 'center',
         color: '#333333',
-        marginBottom: 5,
-    },
-    modules: {
-        margin: 20,
-    },
-    modulesHeader: {
-        fontSize: 16,
-        marginBottom: 8,
-    },
-    module: {
-        fontSize: 14,
-        marginTop: 4,
-        textAlign: 'center',
+        marginTop: 15,
+        fontWeight: "900",
+        fontSize: 20
     }
 });

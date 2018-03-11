@@ -1,8 +1,10 @@
 import React from 'react';
-import {StyleSheet, Image, ScrollView, Button, TextInput, AsyncStorage, Text} from 'react-native';
+import {StyleSheet, Image, ScrollView, View, Button, TextInput, AsyncStorage, Text} from 'react-native';
 import QRCode from 'react-native-qrcode';
 import axios from 'axios';
 import CardView from 'react-native-cardview'
+import Navigation from './Navigation'
+import AddressCard from './AddressCard'
 
 
 export default class Transactions extends React.Component {
@@ -11,6 +13,11 @@ export default class Transactions extends React.Component {
         this.state = {
             transactions: []
         }
+    }
+
+    static navigationOptions =  {
+        title: 'Transactions',
+        headerLeft: null
     }
 
     componentDidMount() {
@@ -30,26 +37,47 @@ export default class Transactions extends React.Component {
         });
     }
 
+    shortenAddress(address) {
+        
+    }
+
     render() {
         return (
+            <View style={styles.containerFullWith}>
             <ScrollView>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
+                <AddressCard address='xrb_3txm99yb6yq1t56iznzthbmjy9wntg61itxusqkhiixh4fz38i7rhsmyjt7a' amount='154123123123123112312312312312312.1232'/>
                 {this.state.transactions.map((prop, i) => {
                     return (
-                        <CardView key={'card-' + i} style={styles.itemContainer}
-                                cardElevation={2}
-                                cardMaxElevation={2}
-                                cornerRadius={5}>
-                                <Text key={'account-' +i}>{prop.account}</Text>
-                                <Text key={'amount-' + i}>{parseFloat(prop.amount /= 1.0e+30).toFixed(5)} NANO</Text>
-                        </CardView>
+                        <AddressCard
+                            key={'account-' +i}
+                            address={prop.account}
+                            amount={prop.amount} />
                     );
                 })}
             </ScrollView>
+            <Navigation navigation={this.props.navigation}/>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    containerFullWith: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
     itemContainer:{
         padding: 20
     }
