@@ -2,17 +2,36 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { NavigationActions } from 'react-navigation';
 
 
 export default class Navigation extends React.Component {
 
   navigateToPage(index) {
     if (index == 0) {
-      this.props.navigation.navigate('Home')
+      this.props.navigation.dispatch(NavigationActions.reset(
+                   {
+                      index: 0,
+                      actions: [
+                        NavigationActions.navigate({ routeName: 'Home'})
+                      ]
+                    }));
     } else if (index == 1) {
-      this.props.navigation.navigate('QrCode')
+      this.props.navigation.dispatch(NavigationActions.reset(
+                   {
+                      index: 0,
+                      actions: [
+                        NavigationActions.navigate({ routeName: 'QrCode'})
+                      ]
+                    }));
     } else {
-      this.props.navigation.navigate('Transactions')
+      this.props.navigation.dispatch(NavigationActions.reset(
+                   {
+                      index: 0,
+                      actions: [
+                        NavigationActions.navigate({ routeName: 'Transactions'})
+                      ]
+                    }));
     }
   }
 

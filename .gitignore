@@ -61,3 +61,4 @@ dist/
 google-services.json
 local.properties
 .DS_STORE
+nanotifyapp.keystore

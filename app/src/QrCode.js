@@ -16,7 +16,8 @@ export default class QrCodeScreen extends React.Component {
 
     static navigationOptions =  {
         title: 'QR Code',
-        headerLeft: null
+        headerLeft: null,
+        header: null
     }
 
     updateQrCode(amount) {

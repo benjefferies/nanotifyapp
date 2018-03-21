@@ -6,29 +6,32 @@ import firebase from 'react-native-firebase';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Navigation from './Navigation'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 export default class HomeScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      account: ''
+      account: '',
+      saving: false
     };
   }
 
   static navigationOptions =  {
       title: 'Subscribe',
-      headerLeft: null
+      headerLeft: null,
+      header: null
   }
 
   componentDidMount() {
-    var setState = this.setState.bind(this)
     AsyncStorage.getItem('account', (err, account) => {
-      setState({account: account})
+      this.setState({account: account})
     });
   }
 
   subscribeClicked() {
+    this.setState({saving: true})
     var account = this.state.account
     if (!account.match('xrb_[a-zA-Z0-9]{60}')) {
       console.log(`Invalid account format ${account}`)
@@ -36,12 +39,14 @@ export default class HomeScreen extends React.Component {
     }
     try {
       AsyncStorage.getItem('account', (err, oldAccount) => {
-        console.log(`Unsubscribing from account ${oldAccount}`)
-        firebase.messaging().unsubscribeFromTopic(oldAccount)
-        AsyncStorage.setItem('account', account, () => {
-          this.subscribe(account)
-        })
+        if (oldAccount !== null) {
+          console.log(`Unsubscribing from account ${oldAccount}`)
+          firebase.messaging().unsubscribeFromTopic(oldAccount)
+        }
       });
+      AsyncStorage.setItem('account', account, () => {
+        this.subscribe(account)
+      })
     } catch (error) {
       console.log(`failed to get or save account ${account}`)
       console.log(error)
@@ -51,7 +56,6 @@ export default class HomeScreen extends React.Component {
       } catch (error) {
         console.log(error)
         console.log(`failed to save account ${account}`)
-        this.setState({account: ''})
       }
     }
   }
@@ -60,20 +64,22 @@ export default class HomeScreen extends React.Component {
     axios.post('https://nanotify.co/mobile/subscribe', {
         account: account
       })
-      .then(function (response) {
+      .then(response => {
         if (response.status == 201) {
           console.log(`Subscribing to account ${account}`)
           firebase.messaging().subscribeToTopic(account)
         } else {
           console.log(`Could not subscribe to account ${account}`)
         }
+        this.setState({saving: false})
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error);
         if (error.response && error.response.status == 409) {
           console.log(`Subscribing to account ${account}`)
           firebase.messaging().subscribeToTopic(account)
         }
+        this.setState({saving: false})
       });
   }
 
@@ -100,6 +106,7 @@ export default class HomeScreen extends React.Component {
             accessibilityLabel="Subscribe to an account"
           />
           </View>
+          <Spinner visible={this.state.saving} textContent={"Subscribing..."} textStyle={{color: '#FFF'}} />
           <Navigation navigation={this.props.navigation}/>
       </View>
     );
