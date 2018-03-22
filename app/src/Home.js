@@ -7,6 +7,7 @@ import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Navigation from './Navigation'
 import Spinner from 'react-native-loading-spinner-overlay';
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 
 export default class HomeScreen extends React.Component {
@@ -16,6 +17,16 @@ export default class HomeScreen extends React.Component {
       account: '',
       saving: false
     };
+  }
+
+  componentWillMount() {
+    firebase.messaging().requestPermissions()
+    // This gets logged only when the app is open
+    // Nothing happens when app is closed, no notification is shown either
+    firebase.messaging().onMessage((message) => {
+      console.log(`message: ${JSON.stringify(message.fcm.body)}`)
+      this.refs.toast.show(message.fcm.body)
+    });
   }
 
   static navigationOptions =  {
@@ -107,6 +118,7 @@ export default class HomeScreen extends React.Component {
           />
           </View>
           <Spinner visible={this.state.saving} textContent={"Subscribing..."} textStyle={{color: '#FFF'}} />
+          <Toast ref="toast"/>
           <Navigation navigation={this.props.navigation}/>
       </View>
     );

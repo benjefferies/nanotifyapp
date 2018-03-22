@@ -2,6 +2,7 @@ import { AppRegistry } from 'react-native';
 import {StackNavigator} from "react-navigation";
 import HomeScreen from "./app/src/Home";
 import QrCodeScreen from "./app/src/QrCode";
+import Transactions from './app/src/Transactions';
 
 
 const App = StackNavigator({
@@ -10,6 +11,4 @@ const App = StackNavigator({
     Transactions: {screen: Transactions}
 });
 
-import QrCode from './QrCode';
-import Transactions from './app/src/Transactions';
-AppRegistry.registerComponent('nanotify', () => App);
+AppRegistry.registerComponent('Nanotify', () => App);
