@@ -11,4 +11,4 @@ const App = StackNavigator({
     Transactions: {screen: Transactions}
 });
 
-AppRegistry.registerComponent('Nanotify', () => App);
+AppRegistry.registerComponent('nanotify', () => App);

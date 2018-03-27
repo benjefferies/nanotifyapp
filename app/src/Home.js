@@ -24,8 +24,11 @@ export default class HomeScreen extends React.Component {
     // This gets logged only when the app is open
     // Nothing happens when app is closed, no notification is shown either
     firebase.messaging().onMessage((message) => {
-      console.log(`message: ${JSON.stringify(message.fcm.body)}`)
-      this.refs.toast.show(message.fcm.body)
+      if (message.fcm) {
+        this.refs.toast.show(message.fcm.body, 500)
+      } else if (message.notification) {
+        this.refs.toast.show(message.notification.body, 500)
+      }
     });
   }
 
