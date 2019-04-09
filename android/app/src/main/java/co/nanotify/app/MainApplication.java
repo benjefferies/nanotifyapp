@@ -1,30 +1,26 @@
 package co.nanotify.app;
 
 import android.app.Application;
-
-import co.nanotify.app.BuildConfig;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.kishanjvaghela.cardview.RNCardViewPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.kishanjvaghela.cardview.RNCardViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
+import com.kishanjvaghela.cardview.RNCardViewPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import io.invertase.firebase.RNFirebasePackage;
-// optional packages - add/remove as appropriate
-import io.invertase.firebase.admob.RNFirebaseAdMobPackage; //Firebase AdMob
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage; // Firebase Analytics
-import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
-import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage; // Firebase Remote Config
-import io.invertase.firebase.crash.RNFirebaseCrashPackage; // Firebase Crash Reporting
-import io.invertase.firebase.database.RNFirebaseDatabasePackage; // Firebase Realtime Database
-import io.invertase.firebase.firestore.RNFirebaseFirestorePackage; // Firebase Firestore
-import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; // Firebase Cloud Messaging
-import io.invertase.firebase.perf.RNFirebasePerformancePackage; // Firebase Performance
-import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Storage
-import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage; // Crashlytics
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
+// optional packages - add/remove as appropriate
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -38,8 +34,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
-        new RNFirebasePackage(),
-        new RNFirebaseMessagingPackage()
+            new VectorIconsPackage(),
+            new RNFirebasePackage(),
+            new RNCardViewPackage(),
+            new RNFirebaseMessagingPackage()
       );
     }
     

@@ -61,3 +61,8 @@ dist/
 google-services.json
 local.properties
 .DS_STORE
+nanotifyapp.keystore
+Pods
+GoogleService-Info.plist
+project.xcworkspace
+xcuserdata

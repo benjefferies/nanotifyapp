@@ -1,52 +1,128 @@
 import React from 'react';
-import { StyleSheet, Image, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, Button, AsyncStorage } from 'react-native';
 import QrCode from "./QrCode";
+import axios from 'axios';
+import firebase from 'react-native-firebase';
+import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import Navigation from './Navigation'
+import Spinner from 'react-native-loading-spinner-overlay';
+import Toast, {DURATION} from 'react-native-easy-toast'
+
 
 export default class HomeScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      account: ''
+      account: '',
+      saving: false
     };
   }
 
-  componentDidMount() {
-    // firebase things?
+  componentWillMount() {
+    firebase.messaging().requestPermissions()
+    // This gets logged only when the app is open
+    // Nothing happens when app is closed, no notification is shown either
+    firebase.messaging().onMessage((message) => {
+      if (message.fcm) {
+        this.refs.toast.show(message.fcm.body, 500)
+      } else if (message.notification) {
+        this.refs.toast.show(message.notification.body, 500)
+      }
+    });
   }
 
-  subscribe() {
-    console.log(`Subscribing to account ${this.state.account}`)
+  static navigationOptions =  {
+      title: 'Subscribe',
+      headerLeft: null,
+      header: null
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem('account', (err, account) => {
+      this.setState({account: account})
+    });
+  }
+
+  subscribeClicked() {
+    this.setState({saving: true})
+    var account = this.state.account
+    if (!account.match('xrb_[a-zA-Z0-9]{60}')) {
+      console.log(`Invalid account format ${account}`)
+      return
+    }
+    try {
+      AsyncStorage.getItem('account', (err, oldAccount) => {
+        if (oldAccount !== null) {
+          console.log(`Unsubscribing from account ${oldAccount}`)
+          firebase.messaging().unsubscribeFromTopic(oldAccount)
+        }
+      });
+      AsyncStorage.setItem('account', account, () => {
+        this.subscribe(account)
+      })
+    } catch (error) {
+      console.log(`failed to get or save account ${account}`)
+      console.log(error)
+      // Maybe first time subscribing
+      try {
+        AsyncStorage.setItem('account', account, () => {this.subscribe(account)})
+      } catch (error) {
+        console.log(error)
+        console.log(`failed to save account ${account}`)
+      }
+    }
+  }
+
+  subscribe(account) {
+    axios.post('https://nanotify.co/mobile/subscribe', {
+        account: account
+      })
+      .then(response => {
+        if (response.status == 201) {
+          console.log(`Subscribing to account ${account}`)
+          firebase.messaging().subscribeToTopic(account)
+        } else {
+          console.log(`Could not subscribe to account ${account}`)
+        }
+        this.setState({saving: false})
+      })
+      .catch(error => {
+        console.log(error);
+        if (error.response && error.response.status == 409) {
+          console.log(`Subscribing to account ${account}`)
+          firebase.messaging().subscribeToTopic(account)
+        }
+        this.setState({saving: false})
+      });
   }
 
   render() {
-      const subscribe = this.subscribe;
       return (
       <View style={styles.containerFullWith}>
         <View style={styles.containerCentered}>
           <Image source={require('../../assets/RNFirebase512x512.png')} style={[styles.logo]} />
           <Text style={styles.welcome}>
-            Welcome to the Nanotify!
+            Welcome to Nanotify!
           </Text>
           </View>
           <View style={styles.containerFullWith}>
           <TextInput
+            placeholder='Enter Nano Address'
             class="cardStyle"
             onChangeText={(account) => this.setState({account: account})}
             value={this.state.account}
           />
-          <Button style={styles.button}
+          <Button
             class="cardStyle"
-            onPress={subscribe}
+            onPress={() => this.subscribeClicked()}
             title="Subscribe"
             accessibilityLabel="Subscribe to an account"
           />
           </View>
-          <Button
-              class="cardStyle"
-              onPress={() => this.props.navigation.navigate('QrCode')}
-              title="QR Code"
-
-          />
+          <Spinner visible={this.state.saving} textContent={"Subscribing..."} textStyle={{color: '#FFF'}} />
+          <Toast ref="toast"/>
+          <Navigation navigation={this.props.navigation}/>
       </View>
     );
   }
@@ -69,11 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     width: 80,
   },
-  button: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -83,17 +154,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
-  modules: {
-    margin: 20,
-  },
-  modulesHeader: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  module: {
-    fontSize: 14,
-    marginTop: 4,
-    textAlign: 'center',
   }
 });
