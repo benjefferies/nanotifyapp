@@ -75,7 +75,7 @@ export default class HomeScreen extends React.Component {
   }
 
   subscribe(account) {
-    axios.post('https://nanotify.co/mobile/subscribe', {
+    axios.post('https://nanotify.me/mobile/subscribe', {
         account: account
       })
       .then(response => {
