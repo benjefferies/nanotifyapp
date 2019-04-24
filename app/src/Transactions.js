@@ -25,7 +25,7 @@ export default class Transactions extends React.Component {
 
     componentDidMount() {
         AsyncStorage.getItem('account', (err, account) => {
-            axios.get(`https://nanotify.co/transactions/${account}`, {
+            axios.get(`https://nanotify.me/transactions/${account}`, {
                 account: account
               })
               .then(response => {
