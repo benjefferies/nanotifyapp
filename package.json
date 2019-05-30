@@ -8,7 +8,7 @@
     "fs-extra": "^4.0.2",
     "jest": "22.0.6",
     "react-test-renderer": "16.2.0",
-    "replace-in-file": "^3.0.0"
+    "replace-in-file": "^4.1.0"
   },
   "scripts": {
     "android": "react-native run-android",
