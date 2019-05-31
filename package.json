@@ -32,7 +32,7 @@
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-material-bottom-navigation": "^0.9.0",
     "react-native-qrcode": "^0.2.6",
-    "react-native-vector-icons": "^4.5.0",
+    "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^1.5.0"
   }
 }
