@@ -21,7 +21,7 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "fb-watchman": "^2.0.0",
     "fbjs": "^0.8.16",
     "react": "^16.2.0",
